@@ -17,7 +17,9 @@ const createWindow = () => {
 		minimizable: true,
 		maximizable: true,
 		closable: true,
-		fullscreenable: true
+		fullscreenable: true,
+		worldSafeExecuteJavaScript: true,
+		contextIsolation: true
 	});
 
 	// load the index.html of the app. (or localhost on port 3000 if you're in development)
