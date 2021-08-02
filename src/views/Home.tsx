@@ -1,16 +1,14 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import {fetchInTheaters} from '../api';
+import InTheatersSlider from '../components/InTheatersSlider';
 
-function Home() {
-	useEffect(() => {
-		// here is where you make API call(s) or any side effects
-		fetchInTheaters();
-	}, []);
-	return <Wrapper>IMDB-Clone</Wrapper>;
+export default function Home() {
+	return (
+		<Wrapper>
+			<InTheatersSlider />
+		</Wrapper>
+	);
 }
-
-export default Home;
 
 const Wrapper = styled.div`
 	display: flex;
