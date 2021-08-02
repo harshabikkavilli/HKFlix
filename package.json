@@ -1,0 +1,97 @@
+{
+	"name": "imdb-clone",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"@testing-library/jest-dom": "^5.14.1",
+		"@testing-library/react": "^11.2.7",
+		"@testing-library/user-event": "^12.8.3",
+		"@types/jest": "^26.0.24",
+		"@types/node": "^12.20.17",
+		"@types/react": "^17.0.15",
+		"@types/react-dom": "^17.0.9",
+		"bootstrap": "^4.6.0",
+		"concurrently": "^5.3.0",
+		"electron-is-dev": "^1.2.0",
+		"electronmon": "^1.1.2",
+		"react": "^17.0.2",
+		"react-bootstrap": "^1.5.0",
+		"react-dom": "^17.0.2",
+		"react-router-dom": "^5.2.0",
+		"react-scripts": "4.0.3",
+		"styled-components": "^5.3.0",
+		"typescript": "^4.3.5",
+		"uuid": "^3.4.0",
+		"wait-on": "^5.2.1",
+		"web-vitals": "^1.1.2"
+	},
+	"scripts": {
+		"start": "concurrently \"npm run react-serve\" \"wait-on http://localhost:3000 && npm run electron-start\"",
+		"build": "npm run react-build",
+		"electron": "npm run electron-build",
+		"test": "react-scripts test --passWithNoTests --watchAll=false",
+		"test-watch": "react-scripts test",
+		"eject": "react-scripts eject",
+		"release": "npm run react-build && npm run electron-release",
+		"electron-start": "electronmon .",
+		"electron-build": "electron-builder",
+		"electron-release": "electron-builder --publish=always",
+		"react-start": "react-scripts start",
+		"react-build": "react-scripts build",
+		"react-serve": "set BROWSER=none&&npm run react-start"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"prettier": {
+		"singleQuote": true,
+		"tabWidth": 2,
+		"trailingComma": "none",
+		"useTabs": true,
+		"bracketSpacing": false,
+		"jsxBracketSameLine": true,
+		"printWidth": 80
+	},
+	"main": "public/electron.js",
+	"build": {
+		"mac": {
+			"icon": "public/icon.icns"
+		},
+		"linux": {
+			"icon": "public/icon.png"
+		},
+		"win": {
+			"icon": "public/icon.ico"
+		}
+	},
+	"homepage": "./",
+	"devDependencies": {
+		"@types/lodash": "^4.14.168",
+		"@types/react-router-dom": "^5.1.7",
+		"@types/styled-components": "^5.1.7",
+		"@types/uuid": "^8.3.0",
+		"babel-plugin-styled-components": "^1.12.0",
+		"electron": "^9.4.3",
+		"electron-builder": "^22.9.1",
+		"electron-packager": "^15.2.0",
+		"prettier": "2.2.1",
+		"react-bootstrap-typeahead": "^5.1.4",
+		"tslint": "^6.1.3",
+		"typescript-plugin-styled-components": "^1.4.4"
+	}
+}
