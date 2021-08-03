@@ -13,7 +13,7 @@ type SliderProps = {
 
 export default function Slider({sliderItems}: SliderProps) {
 	return (
-		<CarouselWrapper interval={null} pause="hover" fade controls={false}>
+		<CarouselWrapper pause="hover" fade controls={false}>
 			{sliderItems.map(({node, detail}, i) => {
 				return (
 					<CarouselItemWrapper key={i}>

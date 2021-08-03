@@ -1,15 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {getIntheatersList} from '../api';
+import {ReactComponent as PlayVideo} from '../assets/playVideo.svg';
 import {Colors} from '../constants';
+import {useModals} from '../providers/ModalsProvider';
+import {ModalBase, ModalTypes} from '../types';
+import Button, {StyledButton} from './common/Button';
 import Slider from './Slider';
 
 export default function InTheatersSlider() {
 	const [inTheaters, setInTheaters] = useState([] as any);
+	const {addModal} = useModals()!;
+
 	const fetchInTheaterItems = async () => {
 		const movieList = await getIntheatersList();
 		setInTheaters(movieList);
 	};
+
 	useEffect(() => {
 		// here is where you make API call(s) or any side effects
 		fetchInTheaterItems();
@@ -65,6 +72,46 @@ export default function InTheatersSlider() {
 		);
 	};
 
+	function showTrailerVideoModal({
+		title,
+		trailerLink
+	}: {
+		title: string;
+		trailerLink: string;
+	}) {
+		const modal: ModalBase = {
+			type: ModalTypes.PlayVideo,
+			props: {
+				title: `${title} - Trailer`,
+				otherProps: {
+					videoLink: trailerLink
+				}
+			}
+		};
+		addModal(modal);
+	}
+
+	const renderActions = (item: any) => {
+		return (
+			<PlayTrailerButton>
+				<Button
+					variant="light"
+					noText
+					onClick={() =>
+						showTrailerVideoModal({
+							title: item.title,
+							trailerLink: item.trailerLink
+						})
+					}>
+					<>
+						<StyledPlayVideo />
+						&ensp;Play Trailer
+					</>
+				</Button>
+			</PlayTrailerButton>
+		);
+	};
+
 	const getSliderItems = () => {
 		return inTheaters.map((item: any) => {
 			const poster = <Poster src={item.imageSrc}></Poster>;
@@ -74,6 +121,7 @@ export default function InTheatersSlider() {
 					{renderDirectedBy(item)}
 					{renderCast(item)}
 					{renderGenres(item)}
+					{renderActions(item)}
 				</DetailWrapper>
 			);
 			return {
@@ -94,7 +142,7 @@ const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	height: 500px;
+	height: 70%;
 	justify-content: center;
 `;
 
@@ -119,11 +167,29 @@ const Poster = styled.div<IPoster>`
 	width: 100%;
 	height: 100%;
 	background-size: cover;
+`;
 
-	/* display: flex;
-	height: 100%;
-	object-fit: cover;
-	width: 100%; */
+const PlayTrailerButton = styled.div`
+	margin-right: auto;
+	border-radius: 5px;
+	display: flex;
+	word-break: break-word;
+	white-space: nowrap;
+	user-select: none;
+	justify-content: center;
+	align-items: center;
+	${StyledButton} {
+		margin: 10px 0;
+		padding-left: 2rem;
+		padding-right: 2.4rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+`;
+
+const StyledPlayVideo = styled(PlayVideo)`
+	font-size: 14px;
 `;
 
 const Label = styled.div`
