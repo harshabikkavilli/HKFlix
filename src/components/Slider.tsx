@@ -3,7 +3,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import styled from 'styled-components';
 
 type SliderItem = {
-	poster: JSX.Element;
+	node: JSX.Element;
 	detail?: JSX.Element;
 };
 
@@ -13,11 +13,12 @@ type SliderProps = {
 
 export default function Slider({sliderItems}: SliderProps) {
 	return (
-		<CarouselWrapper fade controls={false}>
-			{sliderItems.map(({poster, detail}, i) => {
+		<CarouselWrapper interval={null} pause="hover" fade controls={false}>
+			{sliderItems.map(({node, detail}, i) => {
 				return (
 					<CarouselItemWrapper key={i}>
-						{poster}
+						<Overlay></Overlay>
+						{node}
 						<CarouselCaptionWrapper>{detail}</CarouselCaptionWrapper>
 					</CarouselItemWrapper>
 				);
@@ -31,11 +32,20 @@ const CarouselWrapper = styled(Carousel)`
 	height: 100%;
 `;
 
+const Overlay = styled.div`
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 99;
+	background-image: linear-gradient(to right, rgb(0 0 0 / 0%), rgb(68 66 66));
+`;
+
 const CarouselItemWrapper = styled(Carousel.Item)`
 	height: 100%;
+	position: relative;
 	background-color: black;
 	&.active {
-		display: flex;
+		width: 100%;
 	}
 `;
 
@@ -43,14 +53,16 @@ const CarouselCaptionWrapper = styled(Carousel.Caption)`
 	flex-direction: column;
 	height: 100%;
 
-	&.active {
-		display: flex;
-	}
-
 	&.carousel-caption {
-		position: relative;
+		display: flex;
+		justify-content: center;
+		position: absolute;
 		top: 0;
-		left: 0;
+		right: 0;
+		left: 60%;
 		padding: 0;
+		text-align: left;
+		max-width: 40%;
+		z-index: 100;
 	}
 `;
