@@ -5,8 +5,8 @@ import {ReactComponent as PlayVideo} from '../assets/playVideo.svg';
 import {Colors} from '../constants';
 import {useModals} from '../providers/ModalsProvider';
 import {ModalBase, ModalTypes} from '../types';
+import CarouselSlider from './CarouselSlider';
 import Button, {StyledButton} from './common/Button';
-import Slider from './Slider';
 
 export default function InTheatersSlider() {
 	const [inTheaters, setInTheaters] = useState([] as any);
@@ -112,7 +112,7 @@ export default function InTheatersSlider() {
 		);
 	};
 
-	const getSliderItems = () => {
+	const getCarouselSliderItems = () => {
 		return inTheaters.map((item: any) => {
 			const poster = <Poster src={item.imageSrc}></Poster>;
 			const detail = (
@@ -133,7 +133,7 @@ export default function InTheatersSlider() {
 
 	return (
 		<Wrapper>
-			<Slider sliderItems={getSliderItems()} />
+			<CarouselSlider carouselSliderItems={getCarouselSliderItems()} />
 		</Wrapper>
 	);
 }
@@ -142,7 +142,7 @@ const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	height: 70%;
+	height: 56vw;
 	justify-content: center;
 `;
 
@@ -164,9 +164,16 @@ const Poster = styled.div<IPoster>`
 			rgba(0, 0, 0, 0.8)
 		),
 		url(${(props) => props.src});
-	width: 100%;
-	height: 100%;
+	position: absolute;
+	background-position: center center;
 	background-size: cover;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	opacity: 1;
+	transition: opacity 0.4s cubic-bezier(0.665, 0.235, 0.265, 0.8) 0s;
 `;
 
 const PlayTrailerButton = styled.div`

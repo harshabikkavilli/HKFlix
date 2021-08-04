@@ -8,12 +8,17 @@ export default function VideoModal(props: ModalConfig) {
 	const {title, onClose, otherProps} = props;
 
 	const renderVideo = () => {
-		const videoSrc = `${
-			otherProps && otherProps.videoLink
-		}?rel=0&disablekb=1&autoplay=1&controls=0&showinfo=0&modestbranding=1`.replace(
-			'watch?v=',
-			'embed/'
-		);
+		let videoSrc = '';
+		if (otherProps && otherProps.videoLink) {
+			if (otherProps.videoLink.includes('www.youtube.com')) {
+				videoSrc = `${otherProps.videoLink}?rel=0&disablekb=1&autoplay=1&controls=0&showinfo=0&modestbranding=1`.replace(
+					'watch?v=',
+					'embed/'
+				);
+			} else if (otherProps.videoLink.includes('www.imdb.com')) {
+				videoSrc = `${otherProps.videoLink}?autoplay=true&controls=false&showinfo=false`;
+			}
+		}
 		return (
 			<iframe
 				src={videoSrc}

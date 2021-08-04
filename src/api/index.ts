@@ -50,6 +50,7 @@ const trailer = {
 	uploadDate: '08/02/2020 21:45:05',
 	link: 'https://www.imdb.com/video/vi2959588889',
 	linkEmbed: 'https://www.imdb.com/video/imdb/vi2959588889/imdb/embed',
+	ytTrailer: 'https://www.youtube.com/watch?v=Jvurpf91omw',
 	errorMessage: ''
 };
 
@@ -572,4 +573,55 @@ const getIntheatersList = async () => {
 	return intheatersList;
 };
 
-export {fetchInTheaters, getIntheatersList, getPosterImageSrc};
+const getComingSoonList = async () => {
+	// const inTheatersEndpoint = `${API_URL}InTheaters/${API_KEY}`;
+	// const inTheatersResponse = await fetch(inTheatersEndpoint).then((response) =>
+	// 	response.json()
+	// );
+
+	// const intheatersList = await inTheatersResponse.items.reduce(
+	// 	async (accumPromise: any, item: any) => {
+	// 		const accum = await accumPromise;
+	// 		const imageSrc = await getPosterImageSrc({
+	// 			id: item.id,
+	// 			image: item.image
+	// 		});
+	// 		const trailerLink = await getTrailerLink({id: item.id});
+	// 		accum.push({...item, imageSrc, trailerLink});
+	// 		return accum;
+	// 	},
+	// 	Promise.resolve([])
+	// );
+
+	return intheatersList;
+};
+const getMostPopularMoviesList = async () => {
+	// const inTheatersEndpoint = `${API_URL}InTheaters/${API_KEY}`;
+	// const inTheatersResponse = await fetch(inTheatersEndpoint).then((response) =>
+	// 	response.json()
+	// );
+
+	// const intheatersList = await inTheatersResponse.items.reduce(
+	// 	async (accumPromise: any, item: any) => {
+	// 		const accum = await accumPromise;
+	// 		const imageSrc = await getPosterImageSrc({
+	// 			id: item.id,
+	// 			image: item.image
+	// 		});
+	// 		const trailerLink = await getTrailerLink({id: item.id});
+	// 		accum.push({...item, imageSrc, trailerLink});
+	// 		return accum;
+	// 	},
+	// 	Promise.resolve([])
+	// );
+
+	return intheatersList;
+};
+
+export {
+	fetchInTheaters,
+	getComingSoonList,
+	getIntheatersList,
+	getMostPopularMoviesList,
+	getPosterImageSrc
+};

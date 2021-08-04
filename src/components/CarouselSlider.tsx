@@ -2,22 +2,23 @@ import React from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import styled from 'styled-components';
 
-type SliderItem = {
+type CarouselSliderItem = {
 	node: JSX.Element;
 	detail?: JSX.Element;
 };
 
-type SliderProps = {
-	sliderItems: SliderItem[];
+type CarouselSliderProps = {
+	carouselSliderItems: CarouselSliderItem[];
 };
 
-export default function Slider({sliderItems}: SliderProps) {
+export default function CarouselSlider({
+	carouselSliderItems
+}: CarouselSliderProps) {
 	return (
 		<CarouselWrapper pause="hover" fade controls={false}>
-			{sliderItems.map(({node, detail}, i) => {
+			{carouselSliderItems.map(({node, detail}, i) => {
 				return (
 					<CarouselItemWrapper key={i}>
-						<Overlay></Overlay>
 						{node}
 						<CarouselCaptionWrapper>{detail}</CarouselCaptionWrapper>
 					</CarouselItemWrapper>
@@ -30,14 +31,6 @@ export default function Slider({sliderItems}: SliderProps) {
 const CarouselWrapper = styled(Carousel)`
 	display: flex;
 	height: 100%;
-`;
-
-const Overlay = styled.div`
-	position: absolute;
-	top: 0;
-	right: 0;
-	z-index: 99;
-	background-image: linear-gradient(to right, rgb(0 0 0 / 0%), rgb(68 66 66));
 `;
 
 const CarouselItemWrapper = styled(Carousel.Item)`

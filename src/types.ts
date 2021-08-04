@@ -26,3 +26,16 @@ export type ModalBase = {
 export type Modal = ModalBase & {
 	id: string;
 };
+
+export enum MovieCardRowTypes {
+	COMING_SOON = 'COMING_SOON',
+	MOST_POPULAR_MOVIES = 'MOST_POPULAR_MOVIES'
+}
+
+export type MovieCardConfig = {
+	id: string;
+	title: string;
+	year: string;
+	image: string;
+	contentRating: string;
+};

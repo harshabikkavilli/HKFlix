@@ -19,11 +19,11 @@ export default function BasePage({children}: BasePageType) {
 
 const BasePageWrapper = styled.div`
 	display: flex;
-	width: 100vw;
-	height: 100vh;
-	max-width: 1920px;
+	/* max-width: 1920px; */
+	margin: auto;
 	justify-content: center;
 	color: ${Colors.gray};
 	text-align: center;
-	position: relative;
+	flex: 1;
+	overflow: auto;
 `;
