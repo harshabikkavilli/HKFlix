@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {MovieCardConfig} from '../../../types';
+import {THUMBNAIL_URL} from '../../../constants';
 
 export default function SliderItem({
 	movie,
@@ -9,9 +10,10 @@ export default function SliderItem({
 	movie: MovieCardConfig;
 	width: number;
 }) {
+	const posterPath = `${THUMBNAIL_URL}${movie.poster_path}`;
 	return (
 		<SliderItemWrapper width={width}>
-			<SliderImage src={movie.image} alt={movie.title} />
+			<SliderImage src={posterPath} alt={movie.title} />
 		</SliderItemWrapper>
 	);
 }

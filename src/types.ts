@@ -35,7 +35,6 @@ export enum MovieCardRowTypes {
 export type MovieCardConfig = {
 	id: string;
 	title: string;
-	year: string;
-	image: string;
-	contentRating: string;
+	poster_path: string;
+	contentRating?: string;
 };

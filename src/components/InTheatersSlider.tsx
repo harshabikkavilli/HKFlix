@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {getIntheatersList} from '../api';
 import {ReactComponent as PlayVideo} from '../assets/playVideo.svg';
-import {Colors} from '../constants';
+import {Colors, genres, THUMBNAIL_URL} from '../constants';
 import {useModals} from '../providers/ModalsProvider';
 import {ModalBase, ModalTypes} from '../types';
 import CarouselSlider from './CarouselSlider';
@@ -23,41 +23,22 @@ export default function InTheatersSlider() {
 	}, []);
 
 	const renderTtile = (item: any) => {
+		const event = new Date(item.release_date);
+		const options = {year: 'numeric', month: 'long', day: 'numeric'} as const;
+		const releaseDate = event.toLocaleDateString(undefined, options);
 		return (
 			<TitleWrapper>
 				<Title>{item.title}</Title>
-				<Caption>{item.plot}</Caption>
-				<TitleDetails>
+				<Caption>{item.overview}</Caption>
+				{/* <TitleDetails>
 					<Label>{item.year}</Label>&ensp;
 					{item.contentRating && (
 						<RatingLabel>{item.contentRating}</RatingLabel>
 					)}
 					&ensp;<Label>{item.runtimeStr}</Label>
-				</TitleDetails>
-				<ReleasingInfo>{item.releaseState}</ReleasingInfo>
+				</TitleDetails> */}
+				<ReleasingInfo>Release Date: {releaseDate}</ReleasingInfo>
 			</TitleWrapper>
-		);
-	};
-
-	const renderDirectedBy = (item: any) => {
-		return (
-			<SectionWrapper>
-				<SectionLabel>Directed By:</SectionLabel>
-				{item.directorList.map(({id, name}: {id: string; name: string}) => {
-					return <Section key={id}>{name}</Section>;
-				})}
-			</SectionWrapper>
-		);
-	};
-
-	const renderCast = (item: any) => {
-		return (
-			<SectionWrapper>
-				<SectionLabel>Cast:</SectionLabel>
-				{item.starList.map(({id, name}: {id: string; name: string}) => {
-					return <Section key={id}>{name}</Section>;
-				})}
-			</SectionWrapper>
 		);
 	};
 
@@ -65,8 +46,10 @@ export default function InTheatersSlider() {
 		return (
 			<SectionWrapper>
 				<SectionLabel>Genres:</SectionLabel>
-				{item.genreList.map(({value}: {value: string}, i: number) => {
-					return <Section key={i}>{value}</Section>;
+				{item.genre_ids.map((id: number, i: number) => {
+					const genre = genres.find((o) => o.id === id);
+					if (genre) return <Section key={i}>{genre.name}</Section>;
+					return null;
 				})}
 			</SectionWrapper>
 		);
@@ -92,40 +75,40 @@ export default function InTheatersSlider() {
 	}
 
 	const renderActions = (item: any) => {
-		return (
-			<PlayTrailerButton>
-				<Button
-					variant="light"
-					noText
-					onClick={() =>
-						showTrailerVideoModal({
-							title: item.title,
-							trailerLink: item.trailerLink
-						})
-					}>
-					<>
-						<StyledPlayVideo />
-						&ensp;Play Trailer
-					</>
-				</Button>
-			</PlayTrailerButton>
-		);
+		if (item.trailerLink)
+			return (
+				<PlayTrailerButton>
+					<Button
+						variant="light"
+						noText
+						onClick={() =>
+							showTrailerVideoModal({
+								title: item.title,
+								trailerLink: item.trailerLink
+							})
+						}>
+						<>
+							<StyledPlayVideo />
+							&ensp;Play Trailer
+						</>
+					</Button>
+				</PlayTrailerButton>
+			);
 	};
 
 	const getCarouselSliderItems = () => {
 		return inTheaters.map((item: any) => {
-			const poster = <Poster src={item.imageSrc}></Poster>;
+			const backdropPath = `${THUMBNAIL_URL}${item.backdrop_path}`;
+			const heroImage = <Poster src={backdropPath}></Poster>;
 			const detail = (
 				<DetailWrapper>
 					{renderTtile(item)}
-					{renderDirectedBy(item)}
-					{renderCast(item)}
 					{renderGenres(item)}
 					{renderActions(item)}
 				</DetailWrapper>
 			);
 			return {
-				node: poster,
+				node: heroImage,
 				detail
 			};
 		});
@@ -144,6 +127,7 @@ const Wrapper = styled.div`
 	width: 100%;
 	height: 56vw;
 	justify-content: center;
+	z-index: 0;
 `;
 
 const DetailWrapper = styled.div`
@@ -159,7 +143,7 @@ interface IPoster {
 
 const Poster = styled.div<IPoster>`
 	background-image: linear-gradient(
-			to right,
+			to bottom right,
 			rgba(255, 255, 255, 0),
 			rgba(0, 0, 0, 0.8)
 		),

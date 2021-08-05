@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
-import {getComingSoonList} from '../api';
+import {getComingSoonList, getMostPopularMoviesList} from '../api';
 import {Colors} from '../constants';
 import {MovieCardConfig, MovieCardRowTypes} from '../types';
 import Slider from './common/slider/Slider';
@@ -12,15 +12,25 @@ export default function MovieCardRow(props: MovieCardRowProps) {
 	const {type} = props;
 	const [movieCards, setMovieCards] = useState([] as MovieCardConfig[]);
 
-	const fetchMovieCards = async () => {
-		const comingSoonList: MovieCardConfig[] = await getComingSoonList();
-		setMovieCards(comingSoonList);
-	};
-
 	useEffect(() => {
 		// here is where you make API call(s) or any side effects
+		const fetchMovieCards = async () => {
+			switch (type) {
+				case MovieCardRowTypes.COMING_SOON:
+					const comingSoonList: MovieCardConfig[] = await getComingSoonList();
+					setMovieCards(comingSoonList);
+					break;
+				case MovieCardRowTypes.MOST_POPULAR_MOVIES:
+					const mostPopularMoviesList: MovieCardConfig[] = await getMostPopularMoviesList();
+					setMovieCards(mostPopularMoviesList);
+					break;
+				default:
+					setMovieCards([]);
+					break;
+			}
+		};
 		fetchMovieCards();
-	}, []);
+	}, [type]);
 
 	const getHeaderLabel = () => {
 		switch (type) {

@@ -15,7 +15,7 @@ export default function CarouselSlider({
 	carouselSliderItems
 }: CarouselSliderProps) {
 	return (
-		<CarouselWrapper pause="hover" fade controls={false}>
+		<CarouselWrapper pause="hover" fade controls={false} indicators={false}>
 			{carouselSliderItems.map(({node, detail}, i) => {
 				return (
 					<CarouselItemWrapper key={i}>
