@@ -1,26 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {getIntheatersList} from '../api';
+import {useAsyncFunction} from '../api/useAsyncFunction';
 import {ReactComponent as PlayVideo} from '../assets/playVideo.svg';
 import {Colors, genres, THUMBNAIL_URL} from '../constants';
 import {useModals} from '../providers/ModalsProvider';
 import {ModalBase, ModalTypes} from '../types';
 import CarouselSlider from './CarouselSlider';
 import Button, {StyledButton} from './common/Button';
+import {SkeletonLine} from './common/SkeletonLoading';
 
 export default function InTheatersSlider() {
-	const [inTheaters, setInTheaters] = useState([] as any);
+	// const [inTheaters, setInTheaters] = useState([] as any);
 	const {addModal} = useModals()!;
-
-	const fetchInTheaterItems = async () => {
-		const movieList = await getIntheatersList();
-		setInTheaters(movieList);
-	};
-
-	useEffect(() => {
-		// here is where you make API call(s) or any side effects
-		fetchInTheaterItems();
-	}, []);
+	const emptyList: any[] = [];
+	const [inTheaters, error, isPending] = useAsyncFunction(
+		getIntheatersList,
+		emptyList
+	);
 
 	const renderTtile = (item: any) => {
 		const event = new Date(item.release_date);
@@ -114,11 +111,17 @@ export default function InTheatersSlider() {
 		});
 	};
 
-	return (
-		<Wrapper>
-			<CarouselSlider carouselSliderItems={getCarouselSliderItems()} />
-		</Wrapper>
-	);
+	const getCarousel = () => {
+		if (error) {
+			return <pre>ERROR! {error}...</pre>;
+		}
+		if (isPending) {
+			return SkeletonLine({translucent: true});
+		}
+		return <CarouselSlider carouselSliderItems={getCarouselSliderItems()} />;
+	};
+
+	return <Wrapper>{getCarousel()}</Wrapper>;
 }
 
 const Wrapper = styled.div`

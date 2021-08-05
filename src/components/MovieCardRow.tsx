@@ -1,8 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {getComingSoonList, getMostPopularMoviesList} from '../api';
+import {useAsyncFunction} from '../api/useAsyncFunction';
 import {Colors} from '../constants';
 import {MovieCardConfig, MovieCardRowTypes} from '../types';
+import {SkeletonLine} from './common/SkeletonLoading';
 import Slider from './common/slider/Slider';
 
 type MovieCardRowProps = {
@@ -10,27 +12,27 @@ type MovieCardRowProps = {
 };
 export default function MovieCardRow(props: MovieCardRowProps) {
 	const {type} = props;
-	const [movieCards, setMovieCards] = useState([] as MovieCardConfig[]);
 
-	useEffect(() => {
-		// here is where you make API call(s) or any side effects
-		const fetchMovieCards = async () => {
-			switch (type) {
-				case MovieCardRowTypes.COMING_SOON:
-					const comingSoonList: MovieCardConfig[] = await getComingSoonList();
-					setMovieCards(comingSoonList);
-					break;
-				case MovieCardRowTypes.MOST_POPULAR_MOVIES:
-					const mostPopularMoviesList: MovieCardConfig[] = await getMostPopularMoviesList();
-					setMovieCards(mostPopularMoviesList);
-					break;
-				default:
-					setMovieCards([]);
-					break;
-			}
-		};
-		fetchMovieCards();
-	}, [type]);
+	const defaultFunction = async () => {
+		return 'Unknown Category';
+	};
+	// here is where you make API call(s) or any side effects
+	const getAsyncFunction = () => {
+		switch (type) {
+			case MovieCardRowTypes.COMING_SOON:
+				return getComingSoonList;
+			case MovieCardRowTypes.MOST_POPULAR_MOVIES:
+				return getMostPopularMoviesList;
+			default:
+				return defaultFunction;
+		}
+	};
+
+	const emptyList: MovieCardConfig[] = [];
+	const [movieCards, error, isPending] = useAsyncFunction(
+		getAsyncFunction(),
+		emptyList
+	);
 
 	const getHeaderLabel = () => {
 		switch (type) {
@@ -42,6 +44,13 @@ export default function MovieCardRow(props: MovieCardRowProps) {
 				return '';
 		}
 	};
+
+	if (error) {
+		return <pre>ERROR! {error}...</pre>;
+	}
+	if (isPending) {
+		return SkeletonLine({translucent: true, height: '10%'});
+	}
 
 	return (
 		<MovieCardRowWrapper>
