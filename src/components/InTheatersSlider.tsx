@@ -1,10 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, {css, ThemeProvider} from 'styled-components';
 import {getIntheatersList} from '../api';
 import {useAsyncFunction} from '../api/useAsyncFunction';
 import {ReactComponent as PlayVideo} from '../assets/playVideo.svg';
 import {Colors, genres, THUMBNAIL_URL} from '../constants';
 import {useModals} from '../providers/ModalsProvider';
+import {useResponsive} from '../providers/ResponsiveProvider';
 import {ModalBase, ModalTypes} from '../types';
 import CarouselSlider from './CarouselSlider';
 import Button, {StyledButton} from './common/Button';
@@ -13,6 +14,7 @@ import {SkeletonLine} from './common/SkeletonLoading';
 export default function InTheatersSlider() {
 	// const [inTheaters, setInTheaters] = useState([] as any);
 	const {addModal} = useModals()!;
+	const {isBigScreen} = useResponsive()!;
 	const emptyList: any[] = [];
 	const [inTheaters, error, isPending] = useAsyncFunction(
 		getIntheatersList,
@@ -26,14 +28,7 @@ export default function InTheatersSlider() {
 		return (
 			<TitleWrapper>
 				<Title>{item.title}</Title>
-				<Caption>{item.overview}</Caption>
-				{/* <TitleDetails>
-					<Label>{item.year}</Label>&ensp;
-					{item.contentRating && (
-						<RatingLabel>{item.contentRating}</RatingLabel>
-					)}
-					&ensp;<Label>{item.runtimeStr}</Label>
-				</TitleDetails> */}
+				{isBigScreen && <Caption>{item.overview}</Caption>}
 				<ReleasingInfo>Release Date: {releaseDate}</ReleasingInfo>
 			</TitleWrapper>
 		);
@@ -100,7 +95,7 @@ export default function InTheatersSlider() {
 			const detail = (
 				<DetailWrapper>
 					{renderTtile(item)}
-					{renderGenres(item)}
+					{isBigScreen && renderGenres(item)}
 					{renderActions(item)}
 				</DetailWrapper>
 			);
@@ -121,7 +116,11 @@ export default function InTheatersSlider() {
 		return <CarouselSlider carouselSliderItems={getCarouselSliderItems()} />;
 	};
 
-	return <Wrapper>{getCarousel()}</Wrapper>;
+	return (
+		<ThemeProvider theme={{isBigScreen}}>
+			<Wrapper>{getCarousel()}</Wrapper>
+		</ThemeProvider>
+	);
 }
 
 const Wrapper = styled.div`
@@ -174,11 +173,19 @@ const PlayTrailerButton = styled.div`
 	align-items: center;
 	${StyledButton} {
 		margin: 10px 0;
-		padding-left: 2rem;
-		padding-right: 2.4rem;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		${(props) =>
+			props.theme.isBigScreen
+				? css`
+						padding-left: 2rem;
+						padding-right: 2.4rem;
+				  `
+				: css`
+						padding: 0.25rem;
+						font-size: 10px;
+				  `}
 	}
 `;
 
@@ -188,18 +195,26 @@ const StyledPlayVideo = styled(PlayVideo)`
 
 const Label = styled.div`
 	display: flex;
-	font-size: 13px;
 	color: ${Colors.white};
-`;
-
-const RatingLabel = styled(Label)`
-	border: solid 1px;
-	padding: 0px 2px;
-	font-size: 11px;
+	${(props) =>
+		props.theme.isBigScreen
+			? css`
+					font-size: 13px;
+			  `
+			: css`
+					font-size: 10px;
+			  `}
 `;
 
 const Title = styled(Label)`
-	font-size: 36px;
+	${(props) =>
+		props.theme.isBigScreen
+			? css`
+					font-size: 36px;
+			  `
+			: css`
+					font-size: 14px;
+			  `}
 `;
 
 const Caption = styled(Label)`
@@ -210,13 +225,6 @@ const Caption = styled(Label)`
 const TitleWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
-	margin-top: 0.5rem;
-`;
-
-const TitleDetails = styled.div`
-	display: flex;
-	font-size: 13px;
-	color: ${Colors.white};
 	margin-top: 0.5rem;
 `;
 

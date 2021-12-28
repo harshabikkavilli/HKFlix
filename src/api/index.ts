@@ -14,7 +14,7 @@ const getTrailerLink = async ({id}: {id: string}) => {
 		const trailer = trailerResponse.results.find(
 			(video: any) => video.type === 'Trailer'
 		);
-		trailerLink = `https://www.youtube.com/embed/${trailer.key}`;
+		if (trailer) trailerLink = `https://www.youtube.com/embed/${trailer.key}`;
 	}
 	return trailerLink;
 };

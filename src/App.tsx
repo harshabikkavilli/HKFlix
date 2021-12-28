@@ -6,6 +6,7 @@ import BasePage from './components/BasePage';
 import {Colors} from './constants';
 import {withProviders} from './hoc';
 import {ModalsProvider} from './providers/ModalsProvider';
+import {ResponsiveProvider} from './providers/ResponsiveProvider';
 import Routes from './routes';
 
 const GlobalStyle = createGlobalStyle`
@@ -25,4 +26,4 @@ function App() {
 	);
 }
 
-export default withProviders([ModalsProvider])(App);
+export default withProviders([ModalsProvider, ResponsiveProvider])(App);
